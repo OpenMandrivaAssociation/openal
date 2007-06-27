@@ -1,6 +1,6 @@
 %define name		openal
 %define version		0.0.8
-%define	release		%mkrel 2
+%define	release		%mkrel 3
 %define lib_name_orig	lib%{name}
 %define lib_major	0
 %define lib_name	%mklibname %{name} %{lib_major}
@@ -12,6 +12,7 @@ Version:	%{version}
 Release:	%{release}
 License:	LGPL
 Source:		http://www.openal.org/openal_webstf/downloads/%{name}-%{version}.tar.gz
+Patch0:		openal-0.0.8-requirements.patch
 URL:		http://www.openal.org/
 Group:		Sound
 Requires(post):	info-install
@@ -46,6 +47,7 @@ applications which will use OpenAL, a free 3D audio library.
 
 %prep
 %setup -q
+%patch0 -p1 -b .requirements
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -O3" \
