@@ -20,7 +20,6 @@ BuildRequires:	smpeg-devel
 BuildRequires:	texinfo
 BuildRequires:	SDL-devel
 BuildRequires:	oggvorbis-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 OpenAL is a free 3D-audio library, with a programming interface similar
