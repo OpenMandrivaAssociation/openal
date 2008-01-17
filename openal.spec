@@ -5,7 +5,7 @@
 Name:		openal
 Summary:	3D Sound Library
 Version:	0.0.8
-Release:	%mkrel 6
+Release:	%mkrel 7
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
@@ -102,12 +102,13 @@ rm -rf %{buildroot}
 
 %files -n %{libname}
 %defattr(-,root,root)
-%doc AUTHORS ChangeLog NEWS NOTES README TODO
+%doc AUTHORS NEWS NOTES README TODO
 %config(noreplace) %{_sysconfdir}/openalrc
 %{_libdir}/*.so.%{major}*
 
 %files -n %{develname}
 %defattr(-,root,root)
+%doc ChangeLog
 %{_includedir}/AL
 %{_libdir}/*.a
 %{_libdir}/*.la
