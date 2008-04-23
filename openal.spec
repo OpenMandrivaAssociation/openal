@@ -56,13 +56,13 @@ applications which will use OpenAL, a free 3D audio library.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
+%patch0 -p1 -b .arch
+%patch1 -p1 -b .pthread
+%patch2 -p1 -b .pkgconfig
+%patch3 -p1 -b .pause
+%patch4 -p1 -b .nommx
+%patch5 -p1 -b .fixgcc
+%patch6 -p1 -b .dlopen
 
 %build
 export CFLAGS="%{optflags} -O3"
