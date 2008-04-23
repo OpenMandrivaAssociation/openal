@@ -5,16 +5,19 @@
 Name:		openal
 Summary:	3D Sound Library
 Version:	0.0.8
-Release:	%mkrel 8
+Release:	%mkrel 9
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
 Source:		http://www.openal.org/openal_webstf/downloads/%{name}-%{version}.tar.gz
-Patch0:		%{name}-0.0.8-requirements.patch
-Patch1:		fix_gcc-4.2.diff
-Patch2:		%{name}-0.0.8-pthread.patch
+Patch0:		%{name}-arch.patch
+Patch1:		%{name}-0.0.8-pthread.patch
+Patch2:		%{name}-0.0.8-pkgconfig.patch
+Patch3:		%{name}-pause.patch
+Patch4:		%{name}-x86_64-mmx.patch
+Patch5:		fix_gcc-4.2.diff
 # (fc) 0.0.8-8mdv fix dlopen for audio backends
-Patch3:		openal-0.0.8-dlopen.patch
+Patch6:		openal-0.0.8-dlopen.patch
 Requires(post):	info-install
 Requires(preun): info-install
 BuildRequires:	esound-devel
@@ -53,10 +56,13 @@ applications which will use OpenAL, a free 3D audio library.
 
 %prep
 %setup -q
-%patch0 -p1 -b .requirements
-%patch1 -p1 -b .gcc4.2
-%patch2 -p1 -b .pthread
-%patch3 -p1 -b .dlopen
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 export CFLAGS="%{optflags} -O3"
