@@ -10,7 +10,7 @@ License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
 Source:		http://www.openal.org/openal_webstf/downloads/%{name}-%{version}.tar.gz
-Patch0:		%{name}-arch.patch
+Patch0:		%{name}-0.0.8-arch.patch
 Patch1:		%{name}-0.0.8-pthread.patch
 Patch2:		%{name}-0.0.8-pkgconfig.patch
 Patch3:		%{name}-pause.patch
