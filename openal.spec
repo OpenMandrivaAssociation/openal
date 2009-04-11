@@ -18,6 +18,7 @@ Patch4:		%{name}-x86_64-mmx.patch
 Patch5:		fix_gcc-4.2.diff
 # (fc) 0.0.8-8mdv fix dlopen for audio backends
 Patch6:		openal-0.0.8-dlopen.patch
+Patch7:		openal-0.0.8-fix-str-fmt.patch
 Requires(post):	info-install
 Requires(preun): info-install
 BuildRequires:	esound-devel
@@ -63,6 +64,7 @@ applications which will use OpenAL, a free 3D audio library.
 %patch4 -p1 -b .nommx
 %patch5 -p1 -b .fixgcc
 %patch6 -p1 -b .dlopen
+%patch7 -p1 -b .str
 
 %build
 export CFLAGS="%{optflags} -O3"
@@ -82,7 +84,6 @@ export CXXLAGS="%{optflags} -O3"
 		--enable-vorbis \
 		--enable-mp3 \
 		--enable-mp3-dlopen \
-		--enable-capture \
 		--enable-optimization \
 		--disable-debug
 %make
