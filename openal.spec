@@ -91,12 +91,11 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %dir %{_sysconfdir}/openal
 %config(noreplace) %{_sysconfdir}/openal/alsoft.conf
+%{_bindir}/openal-info
 %{_libdir}/*.so.%{major}*
 
 %files -n %{devname}
 %defattr(-,root,root)
-# this binary might be better suited in a package of it's own?
-%{_bindir}/openal-info
 %{_includedir}/AL
 %{_libdir}/*.a
 %{_libdir}/pkgconfig/%{name}.pc
