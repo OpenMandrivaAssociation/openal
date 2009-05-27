@@ -19,12 +19,9 @@ Patch4:		alsoftrc-fix.patch
 Patch5:		static_lib.patch
 Patch6:		openal-soft-1.7.411-fix-static-library-install-location.patch
 
-BuildRequires:	esound-devel
-BuildRequires:	smpeg-devel
-BuildRequires:	SDL-devel
-BuildRequires:	oggvorbis-devel
 BuildRequires:	portaudio-devel
-Suggests:	libSDL
+BuildRequires:	libalsa-devel
+BuildRequires:	cmake
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
