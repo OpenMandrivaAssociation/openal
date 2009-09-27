@@ -6,7 +6,7 @@
 Name:		openal
 Summary:	3D Sound Library
 Version:	1.7.411
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
@@ -19,6 +19,7 @@ Patch4:		alsoftrc-fix.patch
 Patch5:		static_lib.patch
 Patch6:		openal-soft-1.7.411-fix-static-library-install-location.patch
 
+Provides:	%{oname} = %{version}-%{release}
 BuildRequires:	portaudio-devel
 BuildRequires:	libalsa-devel
 BuildRequires:	cmake
@@ -31,8 +32,7 @@ to that of OpenGL.
 %package -n	%{libname}
 Summary:	Main library for OpenAL, a free 3D sound library
 Group:		Sound
-Provides:	%{name} = %{version}-%{release}
-Provides:	%{oname} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
@@ -44,6 +44,7 @@ Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
+Provides:	%{oname}-devel = %{version}-%{release}
 Obsoletes:	%mklibname %{name} 0 -d
 Provides:	%mklibname %{name} 0 -d
 
@@ -84,11 +85,14 @@ rm -rf %{buildroot}
 %postun -n %{libname} -p /sbin/ldconfig
 %endif
 
-%files -n %{libname}
+%files
 %defattr(-,root,root)
 %dir %{_sysconfdir}/openal
 %config(noreplace) %{_sysconfdir}/openal/alsoft.conf
 %{_bindir}/openal-info
+
+%files -n %{libname}
+%defattr(-,root,root)
 %{_libdir}/*.so.%{major}*
 
 %files -n %{devname}
