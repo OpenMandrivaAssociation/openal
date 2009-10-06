@@ -6,7 +6,7 @@
 Name:		openal
 Summary:	3D Sound Library
 Version:	1.7.411
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
@@ -20,7 +20,7 @@ Patch5:		static_lib.patch
 Patch6:		openal-soft-1.7.411-fix-static-library-install-location.patch
 
 Provides:	%{oname} = %{version}-%{release}
-Conflicts:	%{_lib}openal1 < 1.7.411-2
+Conflicts:	openal1 < 1.7.411-2
 BuildRequires:	portaudio-devel
 BuildRequires:	libalsa-devel
 BuildRequires:	cmake
