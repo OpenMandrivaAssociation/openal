@@ -6,7 +6,7 @@
 Name:		openal
 Summary:	3D Sound Library
 Version:	1.10.622
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
@@ -16,6 +16,7 @@ Patch2:		add-openal-config.patch
 Patch3:		add-openal-config-manpage.patch
 Patch5:		static_lib.patch
 Patch6:		openal-soft-1.7.411-fix-static-library-install-location.patch
+Patch7:		openal-soft-1.10.622-prefer-pulseaudio.patch
 
 Provides:	%{oname} = %{version}-%{release}
 Conflicts:	openal1 < 1.7.411-2
@@ -59,11 +60,11 @@ applications which will use OpenAL, a free 3D audio library.
 %patch3 -p1 -b .add_openal_conf_man~
 %patch5 -p1 -b .static~
 %patch6 -p1 -b .static_install~
+%patch7 -p1 -b .pulseaudio~
 
 %build
 %cmake		-DBUILD_STATIC=ON \
 		-DALSOFT_CONFIG=ON
-
 %make
 
 %install
