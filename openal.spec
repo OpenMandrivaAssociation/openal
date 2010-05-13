@@ -5,18 +5,12 @@
 
 Name:		openal
 Summary:	3D Sound Library
-Version:	1.11.753
+Version:	1.12.854
 Release:	%mkrel 1
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
 Source0:	http://connect.creativelabs.com/openal/Downloads/%{oname}-%{version}.tar.bz2
-Patch1:		install-openal-config.patch
-Patch2:		add-openal-config.patch
-Patch3:		add-openal-config-manpage.patch
-Patch5:		static_lib.patch
-Patch6:		openal-soft-1.7.411-fix-static-library-install-location.patch
-#Patch7:		openal-soft-1.10.622-prefer-pulseaudio.patch
 
 Provides:	%{oname} = %{version}-%{release}
 Conflicts:	openal1 < 1.7.411-2
@@ -55,34 +49,18 @@ applications which will use OpenAL, a free 3D audio library.
 
 %prep
 %setup -q -n %{oname}-%{version}
-%patch1 -p0 -b .inst_openal_conf~
-%patch2 -p1 -b .add_openal_conf~
-%patch3 -p1 -b .add_openal_conf_man~
-%patch5 -p1 -b .static~
-%patch6 -p1 -b .static_install~
-#%patch7 -p1 -b .pulseaudio~
 
 %build
-%cmake		-DBUILD_STATIC=ON \
-		-DALSOFT_CONFIG=ON
+%cmake -DALSOFT_CONFIG=ON
 %make
 
 %install
 rm -rf %{buildroot}
 cd build
 %makeinstall_std
-%multiarch_binaries %{buildroot}%{_bindir}/%{name}-config
 
 %clean
 rm -rf %{buildroot}
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
 
 %files
 %defattr(-,root,root)
@@ -97,9 +75,5 @@ rm -rf %{buildroot}
 %files -n %{devname}
 %defattr(-,root,root)
 %{_includedir}/AL
-%{_libdir}/*.a
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/*.so
-%{_bindir}/%{name}-config
-%{multiarch_bindir}/%{name}-config
-%{_mandir}/man1/openal-config.1*
