@@ -18,7 +18,6 @@ BuildRequires:	portaudio-devel
 BuildRequires:	libalsa-devel
 BuildRequires:	cmake
 BuildRequires:	pulseaudio-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 OpenAL is a free 3D-audio library, with a programming interface similar
@@ -27,7 +26,7 @@ to that of OpenGL.
 %package -n	%{libname}
 Summary:	Main library for OpenAL, a free 3D sound library
 Group:		Sound
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
@@ -40,8 +39,8 @@ Requires:	%{libname} = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	%{oname}-devel = %{version}-%{release}
-Obsoletes:	%mklibname %{name} 0 -d
-Provides:	%mklibname %{name} 0 -d
+%define olddev	%mklibname %{name} 0 -d
+%rename		%{olddev}
 
 %description -n	%{devname}
 This package contains the headers that programmers will need to develop
@@ -55,25 +54,18 @@ applications which will use OpenAL, a free 3D audio library.
 %make
 
 %install
-rm -rf %{buildroot}
 cd build
 %makeinstall_std
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root)
 %dir %{_sysconfdir}/openal
 %config(noreplace) %{_sysconfdir}/openal/alsoft.conf
 %{_bindir}/openal-info
 
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/*.so.%{major}*
 
 %files -n %{devname}
-%defattr(-,root,root)
 %{_includedir}/AL
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/*.so
