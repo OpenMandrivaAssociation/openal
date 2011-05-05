@@ -26,7 +26,6 @@ to that of OpenGL.
 %package -n	%{libname}
 Summary:	Main library for OpenAL, a free 3D sound library
 Group:		Sound
-Requires:	%{name} = %{EVRD}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
@@ -58,11 +57,11 @@ cd build
 %makeinstall_std
 
 %files
-%dir %{_sysconfdir}/openal
-%config(noreplace) %{_sysconfdir}/openal/alsoft.conf
 %{_bindir}/openal-info
 
 %files -n %{libname}
+%dir %{_sysconfdir}/openal
+%config(noreplace) %{_sysconfdir}/openal/alsoft.conf
 %{_libdir}/*.so.%{major}*
 
 %files -n %{devname}
