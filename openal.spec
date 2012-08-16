@@ -57,6 +57,7 @@ cd build
 
 %files
 %{_bindir}/openal-info
+%{_bindir}/makehrtf
 
 %files -n %{libname}
 %dir %{_sysconfdir}/openal
