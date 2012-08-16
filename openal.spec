@@ -5,12 +5,12 @@
 
 Name:		openal
 Summary:	3D Sound Library
-Version:	1.13
+Version:	1.14
 Release:	1
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
-Source0:	http://connect.creativelabs.com/openal/Downloads/%{oname}-%{version}.tbz2
+Source0:	http://connect.creativelabs.com/openal/Downloads/%{oname}-%{version}.tar.bz2
 
 Provides:	%{oname} = %{version}-%{release}
 Conflicts:	openal1 < 1.7.411-2
