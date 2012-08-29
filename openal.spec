@@ -1,7 +1,7 @@
-%define major 1
-%define libname %mklibname %{name} %{major}
-%define devname %mklibname %{name} -d
-%define oname openal-soft
+%define	major	1
+%define	libname %mklibname %{name} %{major}
+%define	devname %mklibname %{name} -d
+%define	oname	openal-soft
 
 Summary:	3D Sound Library
 Name:		openal
@@ -22,7 +22,7 @@ BuildRequires:	pulseaudio-devel
 OpenAL is a free 3D-audio library, with a programming interface similar
 to that of OpenGL.
 
-%package -n %{libname}
+%package -n	%{libname}
 Summary:	Main library for OpenAL, a free 3D sound library
 Group:		Sound
 Requires:	%{name}-config = %{EVRD}
@@ -40,7 +40,7 @@ Conflicts:	%{libname} < 1.14-2
 This package contains the configuration of the library needed to run programs
 dynamically linked with OpenAL.
 
-%package -n %{devname}
+%package -n	%{devname}
 Summary:	Headers for developing programs that will use OpenAL
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
