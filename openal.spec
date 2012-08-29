@@ -6,7 +6,7 @@
 Summary:	3D Sound Library
 Name:		openal
 Version:	1.14
-Release:	1
+Release:	2
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
@@ -25,10 +25,20 @@ to that of OpenGL.
 %package -n %{libname}
 Summary:	Main library for OpenAL, a free 3D sound library
 Group:		Sound
+Requires:	%{name}-config = %{EVRD}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
 linked with OpenAL.
+
+%package	config
+Summary:	Configuration for openal
+Group:		Sound
+Conflicts:	%{libname} < 1.14-2
+
+%description	config
+This package contains the configuration of the library needed to run programs
+dynamically linked with OpenAL.
 
 %package -n %{devname}
 Summary:	Headers for developing programs that will use OpenAL
@@ -59,9 +69,11 @@ cd build
 %{_bindir}/openal-info
 %{_bindir}/makehrtf
 
-%files -n %{libname}
+%files config
 %dir %{_sysconfdir}/openal
 %config(noreplace) %{_sysconfdir}/openal/alsoft.conf
+
+%files -n %{libname}
 %{_libdir}/*.so.%{major}*
 
 %files -n %{devname}
