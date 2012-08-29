@@ -13,10 +13,10 @@ URL:		http://www.openal.org
 Source0:	http://connect.creativelabs.com/openal/Downloads/%{oname}-%{version}.tar.bz2
 Provides:	%{oname} = %{version}-%{release}
 Conflicts:	openal1 < 1.7.411-2
-BuildRequires:	portaudio-devel
-BuildRequires:	libalsa-devel
 BuildRequires:	cmake
-BuildRequires:	pulseaudio-devel
+BuildRequires:	pkgconfig(portaudio-2.0)
+BuildRequires:	pkgconfig(alsa)
+BuildRequires:	pkgconfig(libpulse)
 
 %description
 OpenAL is a free 3D-audio library, with a programming interface similar
