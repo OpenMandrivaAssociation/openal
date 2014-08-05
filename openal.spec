@@ -2,6 +2,7 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%mklibname %{name} -d
+%bcond_without	ffmpeg
 
 Summary:	3D Sound Library
 Name:		openal
@@ -13,7 +14,9 @@ Url:		http://www.openal.org
 Source0:	http://kcat.strangesoft.net/openal-releases/%{oname}-%{version}.tar.bz2
 BuildRequires:	cmake
 BuildRequires:	alsa-oss-devel
+%if %{with ffmpeg}
 BuildRequires:	ffmpeg-devel
+%endif
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(portaudio-2.0)
 Requires:	%{name}-config >= %{version}-%{release}
@@ -65,9 +68,11 @@ mkdir -p %{buildroot}/%{_sysconfdir}/%{name}
 install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 
 %files
+%if %{with ffmpeg}
 %{_bindir}/alstream
 %{_bindir}/allatency
 %{_bindir}/alreverb
+%endif
 %{_bindir}/openal-info
 %{_bindir}/makehrtf
 %{_datadir}/%{name}/alsoftrc.sample
@@ -83,4 +88,3 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_includedir}/AL
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/*.so
-
