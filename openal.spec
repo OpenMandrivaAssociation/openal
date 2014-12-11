@@ -1,8 +1,7 @@
-%define	oname	openal-soft
-%define	major	1
-%define	libname	%mklibname %{name} %{major}
-%define	devname	%mklibname %{name} -d
-%bcond_without	ffmpeg
+%define oname openal-soft
+%define major 1
+%define libname %mklibname %{name} %{major}
+%define devname %mklibname %{name} -d
 
 Summary:	3D Sound Library
 Name:		openal
@@ -14,11 +13,11 @@ Url:		http://www.openal.org
 Source0:	http://kcat.strangesoft.net/openal-releases/%{oname}-%{version}.tar.bz2
 BuildRequires:	cmake
 BuildRequires:	alsa-oss-devel
-%if %{with ffmpeg}
 BuildRequires:	ffmpeg-devel
-%endif
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(portaudio-2.0)
+BuildRequires:	pkgconfig(sdl2)
+BuildRequires:	SDL_sound-devel
 Requires:	%{name}-config >= %{version}-%{release}
 Provides:	%{oname} = %{version}-%{release}
 
@@ -26,12 +25,12 @@ Provides:	%{oname} = %{version}-%{release}
 OpenAL is a free 3D-audio library, with a programming interface similar
 to that of OpenGL.
 
-%package	config
+%package config
 Summary:	Configuration for openal
 Group:		Sound
 BuildArch:	noarch
 
-%description	config
+%description config
 This package contains the configuration of the library needed to run programs
 dynamically linked with OpenAL.
 
@@ -73,16 +72,16 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %files
 %dir %{_datadir}/openal
 %dir %{_datadir}/openal/hrtf
-%if %{with ffmpeg}
-%{_bindir}/alstream
+%{_bindir}/alffplay
 %{_bindir}/allatency
+%{_bindir}/alloopback
 %{_bindir}/alreverb
-%endif
+%{_bindir}/alstream
 %{_bindir}/openal-info
 %{_bindir}/makehrtf
 %{_datadir}/%{name}/alsoftrc.sample
-%{_datadir}/openal/hrtf/*.mhr
-%{_datadir}/openal/hrtf/default-48000.mhr
+%{_datadir}/%{name}/hrtf/*.mhr
+%{_datadir}/%{name}/hrtf/default-48000.mhr
     
 %files config
 %dir %{_sysconfdir}/openal
