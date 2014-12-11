@@ -71,6 +71,8 @@ mkdir -p %{buildroot}/%{_sysconfdir}/%{name}
 install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 
 %files
+%dir %{_datadir}/openal
+%dir %{_datadir}/openal/hrtf
 %if %{with ffmpeg}
 %{_bindir}/alstream
 %{_bindir}/allatency
@@ -79,10 +81,13 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_bindir}/openal-info
 %{_bindir}/makehrtf
 %{_datadir}/%{name}/alsoftrc.sample
-
+%{_datadir}/openal/hrtf/*.mhr
+%{_datadir}/openal/hrtf/default-48000.mhr
+    
 %files config
 %dir %{_sysconfdir}/openal
 %config(noreplace) %{_sysconfdir}/openal/alsoft.conf
+%{_bindir}/alsoft-config
 
 %files -n %{libname}
 %{_libdir}/libopenal.so.%{major}*
