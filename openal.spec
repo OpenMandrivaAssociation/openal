@@ -81,7 +81,6 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_bindir}/makehrtf
 %{_datadir}/%{name}/alsoftrc.sample
 %{_datadir}/%{name}/hrtf/*.mhr
-%{_datadir}/%{name}/hrtf/default-48000.mhr
     
 %files config
 %dir %{_sysconfdir}/openal
