@@ -11,6 +11,7 @@ License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
 Source0:	http://kcat.strangesoft.net/openal-releases/%{oname}-%{version}.tar.bz2
+Source1:	openal.rpmlintrc
 BuildRequires:	cmake
 BuildRequires:	alsa-oss-devel
 BuildRequires:	ffmpeg-devel
