@@ -6,7 +6,7 @@
 Summary:	3D Sound Library
 Name:		openal
 Version:	1.16.0
-Release:	3
+Release:	4
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
