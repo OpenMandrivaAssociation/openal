@@ -6,7 +6,7 @@
 Name:		openal
 Summary:	3D Sound Library
 Version:	1.15.1
-Release:	4
+Release:	4.1
 License:	LGPLv2
 Group:		Sound
 URL:		http://www.openal.org
@@ -15,7 +15,7 @@ BuildRequires:	portaudio-devel
 BuildRequires:	alsa-oss-devel
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(libpulse)
-BuildRequires:	ffmpeg-devel
+BuildRequires:	ffmpeg-devel >= 2.5.4
 Provides:	%{oname} = %{version}-%{release}
 Conflicts:	openal1 < 1.7.411-2
 # Due to some files moved from library subpackage to main package
