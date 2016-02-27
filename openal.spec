@@ -29,9 +29,8 @@ OpenAL is a free 3D-audio library, with a programming interface similar
 to that of OpenGL.
 
 %package config
-Summary:	Configuration for openal
+Summary:	Configuration tool for openal
 Group:		Sound
-BuildArch:	noarch
 
 %description config
 This package contains the configuration of the library needed to run programs
