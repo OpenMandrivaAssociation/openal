@@ -33,8 +33,7 @@ Summary:	Configuration tool for openal
 Group:		Sound
 
 %description config
-This package contains the configuration of the library needed to run programs
-dynamically linked with OpenAL.
+This package contains a configuration tool and configuration files for OpenAL
 
 %package -n %{libname}
 Summary:	Main library for OpenAL, a free 3D sound library
