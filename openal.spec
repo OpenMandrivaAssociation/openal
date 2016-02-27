@@ -20,6 +20,7 @@ BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(portaudio-2.0)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	SDL_sound-devel
+BuildRequires:	qt4-devel
 Requires:	%{name}-config >= %{version}-%{release}
 Provides:	%{oname} = %{version}-%{release}
 
@@ -61,10 +62,7 @@ applications which will use OpenAL, a free 3D audio library.
 %apply_patches
 
 %build
-#export CC=gcc
-#export CXX=g++
-
-%cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON
+%cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt4/bin/qmake
 %make
 
 %install
