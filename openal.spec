@@ -5,14 +5,13 @@
 
 Summary:	3D Sound Library
 Name:		openal
-Version:	1.17.2
-Release:	2
+Version:	1.18.2
+Release:	1
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
 Source0:	http://kcat.strangesoft.net/openal-releases/%{oname}-%{version}.tar.bz2
 Source1:	openal.rpmlintrc
-Patch0:		openal-1.17.2-ffmpeg-3.0.patch
 BuildRequires:	cmake
 BuildRequires:	alsa-oss-devel
 BuildRequires:	ffmpeg-devel
@@ -74,6 +73,7 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_bindir}/alffplay
 %{_bindir}/allatency
 %{_bindir}/alloopback
+%{_bindir}/alrecord
 %{_bindir}/alreverb
 %{_bindir}/alstream
 %{_bindir}/altonegen
@@ -83,7 +83,8 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_bindir}/makehrtf
 %{_datadir}/%{name}/alsoftrc.sample
 %{_datadir}/%{name}/hrtf/*.mhr
-    
+%{_datadir}/%{name}/presets
+
 %files config
 %dir %{_sysconfdir}/openal
 %config(noreplace) %{_sysconfdir}/openal/alsoft.conf
@@ -96,3 +97,4 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_includedir}/AL
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/*.so
+%{_libdir}/cmake/OpenAL
