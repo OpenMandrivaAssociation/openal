@@ -6,7 +6,7 @@
 Summary:	3D Sound Library
 Name:		openal
 Version:	1.18.2
-Release:	1
+Release:	3
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
@@ -19,7 +19,8 @@ BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(portaudio-2.0)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	SDL_sound-devel
-BuildRequires:	qt4-devel
+BuildRequires:	qmake5
+BuildRequires:	cmake(Qt5Widgets)
 Requires:	%{name}-config >= %{version}-%{release}
 Provides:	%{oname} = %{version}-%{release}
 
@@ -59,7 +60,9 @@ applications which will use OpenAL, a free 3D audio library.
 %apply_patches
 
 %build
-%cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt4/bin/qmake
+export CC=gcc
+export CXX=g++
+%cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake
 %make
 
 %install
