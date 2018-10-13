@@ -5,12 +5,12 @@
 
 Summary:	3D Sound Library
 Name:		openal
-Version:	1.18.2
-Release:	4
+Version:	1.19.1
+Release:	1
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
-Source0:	http://kcat.strangesoft.net/openal-releases/%{oname}-%{version}.tar.bz2
+Source0:	https://github.com/kcat/openal-soft/archive/%{oname}-%{version}.tar.gz
 Source1:	openal.rpmlintrc
 BuildRequires:	cmake
 BuildRequires:	alsa-oss-devel
@@ -56,12 +56,12 @@ This package contains the headers that programmers will need to develop
 applications which will use OpenAL, a free 3D audio library.
 
 %prep
-%setup -q -n %{oname}-%{version}
+%setup -q -n %{oname}-%{oname}-%{version}
 %apply_patches
 
 %build
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 %cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake
 %make
 
@@ -74,6 +74,8 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %dir %{_datadir}/openal
 %dir %{_datadir}/openal/hrtf
 %{_bindir}/alffplay
+%{_bindir}/almultireverb
+%{_bindir}/alplay
 %{_bindir}/allatency
 %{_bindir}/alloopback
 %{_bindir}/alrecord
@@ -81,7 +83,6 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_bindir}/alstream
 %{_bindir}/altonegen
 %{_bindir}/alhrtf
-%{_bindir}/bsincgen
 %{_bindir}/openal-info
 %{_bindir}/makehrtf
 %{_datadir}/%{name}/alsoftrc.sample
