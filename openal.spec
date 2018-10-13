@@ -15,6 +15,7 @@ Source1:	openal.rpmlintrc
 BuildRequires:	cmake
 BuildRequires:	alsa-oss-devel
 BuildRequires:	ffmpeg-devel
+BuildRequires:	glibc-devel
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(portaudio-2.0)
 BuildRequires:	pkgconfig(sdl2)
