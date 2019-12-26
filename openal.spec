@@ -5,8 +5,8 @@
 
 Summary:	3D Sound Library
 Name:		openal
-Version:	1.19.1
-Release:	3
+Version:	1.20.0
+Release:	1
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
@@ -64,10 +64,10 @@ applications which will use OpenAL, a free 3D audio library.
 #export CC=gcc
 #export CXX=g++
 %cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake
-%make
+%make_build
 
 %install
-%makeinstall_std -C build
+%make_install -C build
 mkdir -p %{buildroot}/%{_sysconfdir}/%{name}
 install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 
