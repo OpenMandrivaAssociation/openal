@@ -1,3 +1,8 @@
+%ifarch %{ix86}
+%define _disable_ld_no_undefined 1
+%define _disable_lto 1
+%endif
+
 %define oname openal-soft
 %define major 1
 %define libname %mklibname %{name} %{major}
@@ -61,8 +66,14 @@ applications which will use OpenAL, a free 3D audio library.
 %autopatch -p1
 
 %build
-#export CC=gcc
-#export CXX=g++
+# i686 need gcc, gold linker, lD undefined and LTO disabled for compile, or this error appear:
+#ld: error: cannot preempt symbol: alGetString
+#BUILDSTDERR: >>> defined in libopenal.so.1.20.0
+%ifarch %{ix86}
+%global ldflags %{ldflags} -fuse-ld=gold
+export CC=gcc
+export CXX=g++
+%endif
 %cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake
 %make_build
 
