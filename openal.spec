@@ -64,8 +64,8 @@ applications which will use OpenAL, a free 3D audio library.
 
 %build
 %global ldflags %{ldflags} -fuse-ld=gold
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 %cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake
 %make_build
 
