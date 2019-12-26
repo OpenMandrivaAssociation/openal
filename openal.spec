@@ -58,7 +58,7 @@ applications which will use OpenAL, a free 3D audio library.
 
 %prep
 %setup -q -n %{oname}-%{oname}-%{version}
-%apply_patches
+%autopatch -p1
 
 %build
 #export CC=gcc
