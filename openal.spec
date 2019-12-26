@@ -85,7 +85,6 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_bindir}/altonegen
 %{_bindir}/alhrtf
 %{_bindir}/openal-info
-%{_bindir}/makehrtf
 %{_datadir}/%{name}/alsoftrc.sample
 %{_datadir}/%{name}/hrtf/*.mhr
 %{_datadir}/%{name}/presets
