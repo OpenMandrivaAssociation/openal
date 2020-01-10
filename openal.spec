@@ -1,24 +1,26 @@
-%ifarch %{ix86}
-%define _disable_ld_no_undefined 1
-%define _disable_lto 1
-%endif
-
 %define oname openal-soft
 %define major 1
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
 
+# (tpg) 2020-01-10
+# LLD dissallows preemption of protected visibility syms
+# ld: error: cannot preempt symbol: alGetString
+# BUILDSTDERR: >>> defined in libopenal.so.1.20.0
+%global optflags %{optflags} -fuse-ld=bfd
+%global ldflags %{ldflags} -fuse-ld=bfd
+
 Summary:	3D Sound Library
 Name:		openal
 Version:	1.20.0
-Release:	1
+Release:	2
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
 Source0:	https://github.com/kcat/openal-soft/archive/%{oname}-%{version}.tar.gz
 Source1:	openal.rpmlintrc
 BuildRequires:	cmake
-BuildRequires:	alsa-oss-devel
+BuildRequires:	pkgconfig(alsa)
 BuildRequires:	ffmpeg-devel
 BuildRequires:	glibc-devel
 BuildRequires:	pkgconfig(libpulse)
@@ -57,7 +59,7 @@ Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	%{oname}-devel = %{version}-%{release}
 
-%description -n	%{devname}
+%description -n %{devname}
 This package contains the headers that programmers will need to develop
 applications which will use OpenAL, a free 3D audio library.
 
@@ -66,14 +68,6 @@ applications which will use OpenAL, a free 3D audio library.
 %autopatch -p1
 
 %build
-# i686 need gcc, gold linker, lD undefined and LTO disabled for compile, or this error appear:
-#ld: error: cannot preempt symbol: alGetString
-#BUILDSTDERR: >>> defined in libopenal.so.1.20.0
-%ifarch %{ix86}
-%global ldflags %{ldflags} -fuse-ld=gold
-export CC=gcc
-export CXX=g++
-%endif
 %cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake
 %make_build
 
