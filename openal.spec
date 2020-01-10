@@ -4,11 +4,14 @@
 %define devname %mklibname %{name} -d
 
 # (tpg) 2020-01-10
+%define _disable_lto 1
+
+# (tpg) 2020-01-10
 # LLD dissallows preemption of protected visibility syms
 # ld: error: cannot preempt symbol: alGetString
 # BUILDSTDERR: >>> defined in libopenal.so.1.20.0
 %global optflags %{optflags} -fuse-ld=bfd
-%define _disable_lto 1
+
 
 Summary:	3D Sound Library
 Name:		openal
