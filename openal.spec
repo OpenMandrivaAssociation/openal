@@ -8,6 +8,7 @@
 # ld: error: cannot preempt symbol: alGetString
 # BUILDSTDERR: >>> defined in libopenal.so.1.20.0
 %global optflags %{optflags} -fuse-ld=bfd
+%define _disable_lto 1
 
 Summary:	3D Sound Library
 Name:		openal
