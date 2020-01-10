@@ -64,8 +64,7 @@ This package contains the headers that programmers will need to develop
 applications which will use OpenAL, a free 3D audio library.
 
 %prep
-%setup -q -n %{oname}-%{oname}-%{version}
-%autopatch -p1
+%autosetup -n %{oname}-%{oname}-%{version} -p1
 
 %build
 %cmake -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake
