@@ -12,18 +12,19 @@
 %define lib32name %mklib32name %{name} %{major}
 %define dev32name %mklib32name %{name} -d
 
-# (tpg) 2020-01-10
-#define _disable_lto 1
-
 Summary:	3D Sound Library
 Name:		openal
 Version:	1.20.1
-Release:	1
+Release:	2
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
 Source0:	https://github.com/kcat/openal-soft/archive/%{oname}-%{version}.tar.gz
 Source1:	openal.rpmlintrc
+# As of LLVM 10.0, OpenAL 1.20.1, allowing __attribute__((visibility("protected")))
+# results in ffmpeg failing to build, complaining it "cannot preempt symbol" alGetError
+# Same behavior observed when building with gcc 10.1, regardless of linker.
+Patch0:		openal-1.20.1-no-visibility-protected.patch
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	ffmpeg-devel
