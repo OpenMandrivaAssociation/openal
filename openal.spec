@@ -39,6 +39,9 @@ BuildRequires:	cmake(Qt5Widgets)
 BuildRequires:	ninja
 Requires:	%{name}-config >= %{version}-%{release}
 Provides:	%{oname} = %{version}-%{release}
+%if %{with compat32}
+BuildRequires:	devel(libSDL2-2.0)
+%endif
 
 %description
 OpenAL is a free 3D-audio library, with a programming interface similar
