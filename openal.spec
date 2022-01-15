@@ -14,17 +14,18 @@
 
 Summary:	3D Sound Library
 Name:		openal
-Version:	1.20.1
-Release:	3
+Version:	1.21.1
+Release:	1
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
-Source0:	https://github.com/kcat/openal-soft/archive/%{oname}-%{version}.tar.gz
+Source0:	https://github.com/kcat/openal-soft/archive/refs/tags/%{version}.tar.gz
 Source1:	openal.rpmlintrc
 # As of LLVM 10.0, OpenAL 1.20.1, allowing __attribute__((visibility("protected")))
 # results in ffmpeg failing to build, complaining it "cannot preempt symbol" alGetError
 # Same behavior observed when building with gcc 10.1, regardless of linker.
-Patch0:		openal-1.20.1-no-visibility-protected.patch
+#Patch0:		openal-1.20.1-no-visibility-protected.patch
+Patch0:		openal-1.21.1-ffmpeg-5.0.patch
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	ffmpeg-devel
@@ -92,7 +93,7 @@ applications which will use OpenAL, a free 3D audio library.
 %endif
 
 %prep
-%autosetup -n %{oname}-%{oname}-%{version} -p1
+%autosetup -n %{oname}-%{version} -p1
 %if %{with compat32}
 %cmake32 -DALSOFT_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake -G Ninja
 cd ..
