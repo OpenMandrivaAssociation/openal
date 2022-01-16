@@ -31,6 +31,7 @@ BuildRequires:	pkgconfig(alsa)
 BuildRequires:	ffmpeg-devel
 BuildRequires:	glibc-devel
 BuildRequires:	pkgconfig(libpulse)
+BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(portaudio-2.0)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	SDL_sound-devel
@@ -41,6 +42,7 @@ Requires:	%{name}-config >= %{version}-%{release}
 Provides:	%{oname} = %{version}-%{release}
 %if %{with compat32}
 BuildRequires:	devel(libSDL2-2.0)
+BuildRequires:	devel(libsndfile)
 %endif
 
 %description
