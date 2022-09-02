@@ -15,7 +15,7 @@
 Summary:	3D Sound Library
 Name:		openal
 Version:	1.22.2
-Release:	1
+Release:	2
 License:	LGPLv2
 Group:		Sound
 Url:		http://www.openal.org
@@ -38,11 +38,16 @@ BuildRequires:	qmake5
 BuildRequires:	cmake(Qt5Widgets)
 BuildRequires:	ninja
 BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	pkgconfig(libmysofa)
 Requires:	%{name}-config >= %{version}-%{release}
 Provides:	%{oname} = %{version}-%{release}
 %if %{with compat32}
 BuildRequires:	devel(libSDL2-2.0)
 BuildRequires:	devel(libsndfile)
+BuildRequires:	devel(libz)
+BuildRequires:	devel(libpulse)
+BuildRequires:	devel(libdbus-1)
+BuildRequires:	devel(libavformat)
 %endif
 
 %description
@@ -133,6 +138,7 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_bindir}/altonegen
 %{_bindir}/alhrtf
 %{_bindir}/openal-info
+%{_bindir}/makemhr
 %{_datadir}/%{name}/alsoftrc.sample
 %{_datadir}/%{name}/hrtf/*.mhr
 %{_datadir}/%{name}/presets
