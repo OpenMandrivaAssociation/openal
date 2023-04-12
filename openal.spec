@@ -38,6 +38,7 @@ BuildRequires:	cmake(Qt5Widgets)
 BuildRequires:	ninja
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	pkgconfig(libmysofa)
+BuildRequires:	atomic-devel
 Requires:	%{name}-config >= %{version}-%{release}
 Provides:	%{oname} = %{version}-%{release}
 %if %{with compat32}
@@ -47,6 +48,7 @@ BuildRequires:	devel(libz)
 BuildRequires:	devel(libpulse)
 BuildRequires:	devel(libdbus-1)
 BuildRequires:	devel(libavformat)
+BuildRequires:	devel(libatomic)
 %endif
 
 %description
