@@ -18,7 +18,7 @@ Version:	1.23.1
 Release:	2
 License:	LGPLv2
 Group:		Sound
-Url:		http://www.openal.org
+Url:		https://www.openal.org
 Source0:	https://github.com/kcat/openal-soft/archive/refs/tags/%{version}.tar.gz
 Source1:	openal.rpmlintrc
 # As of LLVM 10.0, OpenAL 1.20.1, allowing __attribute__((visibility("protected")))
