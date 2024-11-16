@@ -128,6 +128,9 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %files
 %dir %{_datadir}/openal
 %dir %{_datadir}/openal/hrtf
+%{_bindir}/aldebug
+%{_bindir}/aldirect
+%{_bindir}/allafplay
 %{_bindir}/alffplay
 %{_bindir}/almultireverb
 %{_bindir}/alplay
