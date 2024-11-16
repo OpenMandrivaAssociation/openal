@@ -14,8 +14,8 @@
 
 Summary:	3D Sound Library
 Name:		openal
-Version:	1.23.1
-Release:	2
+Version:	1.24.0
+Release:	1
 License:	LGPLv2
 Group:		Sound
 Url:		https://www.openal.org
@@ -128,6 +128,9 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %files
 %dir %{_datadir}/openal
 %dir %{_datadir}/openal/hrtf
+%{_bindir}/aldebug
+%{_bindir}/aldirect
+%{_bindir}/allafplay
 %{_bindir}/alffplay
 %{_bindir}/almultireverb
 %{_bindir}/alplay
