@@ -14,12 +14,12 @@
 
 Summary:	3D Sound Library
 Name:		openal
-Version:	1.24.0
+Version:	1.24.1
 Release:	1
 License:	LGPLv2
 Group:		Sound
 Url:		https://www.openal.org
-Source0:	https://github.com/kcat/openal-soft/archive/refs/tags/%{version}.tar.gz
+Source0:	https://github.com/kcat/openal-soft/archive/%{version}/%{oname}-%{version}.tar.gz
 Source1:	openal.rpmlintrc
 # As of LLVM 10.0, OpenAL 1.20.1, allowing __attribute__((visibility("protected")))
 # results in ffmpeg failing to build, complaining it "cannot preempt symbol" alGetError
