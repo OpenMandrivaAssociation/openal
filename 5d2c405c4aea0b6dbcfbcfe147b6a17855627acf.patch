@@ -1,0 +1,22 @@
+From 5d2c405c4aea0b6dbcfbcfe147b6a17855627acf Mon Sep 17 00:00:00 2001
+From: Chris Robinson <chris.kcat@gmail.com>
+Date: Thu, 28 Nov 2024 02:06:39 -0800
+Subject: [PATCH] Always build fmt as a static library
+
+---
+ fmt-11.0.2/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fmt-11.0.2/CMakeLists.txt b/fmt-11.0.2/CMakeLists.txt
+index 04c586d813..5048f7d603 100644
+--- a/fmt-11.0.2/CMakeLists.txt
++++ b/fmt-11.0.2/CMakeLists.txt
+@@ -66,7 +66,7 @@ add_headers(FMT_HEADERS args.h base.h chrono.h color.h compile.h core.h format.h
+                         xchar.h)
+ set(FMT_SOURCES src/format.cc src/os.cc)
+ 
+-add_library(alsoft.fmt ${FMT_SOURCES} ${FMT_HEADERS} README.md ChangeLog.md)
++add_library(alsoft.fmt STATIC ${FMT_SOURCES} ${FMT_HEADERS} README.md ChangeLog.md)
+ add_library(alsoft::fmt ALIAS alsoft.fmt)
+ 
+ if (cxx_std_11 IN_LIST CMAKE_CXX_COMPILE_FEATURES)
