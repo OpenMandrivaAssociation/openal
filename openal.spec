@@ -25,7 +25,7 @@ Source1:	openal.rpmlintrc
 # results in ffmpeg failing to build, complaining it "cannot preempt symbol" alGetError
 # Same behavior observed when building with gcc 10.1, regardless of linker.
 #Patch0:		openal-1.20.1-no-visibility-protected.patch
-Patch0:      https://github.com/kcat/openal-soft/commit/5d2c405c4aea0b6dbcfbcfe147b6a17855627acf.patch
+#Patch0:      https://github.com/kcat/openal-soft/commit/5d2c405c4aea0b6dbcfbcfe147b6a17855627acf.patch
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	ffmpeg-devel
