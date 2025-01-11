@@ -132,11 +132,11 @@ install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 %{_bindir}/aldebug
 %{_bindir}/aldirect
 %{_bindir}/allafplay
-%{_bindir}/alffplay
+#{_bindir}/alffplay
 %{_bindir}/almultireverb
 %{_bindir}/alplay
 %{_bindir}/allatency
-%{_bindir}/alloopback
+#{_bindir}/alloopback
 %{_bindir}/alrecord
 %{_bindir}/alreverb
 %{_bindir}/alstream
