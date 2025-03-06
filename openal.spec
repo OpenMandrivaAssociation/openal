@@ -7,15 +7,17 @@
 
 %define oname openal-soft
 %define major 1
-%define libname %mklibname %{name} %{major}
+%define oldlibname %mklibname %{name} 1
+%define libname %mklibname %{name}
 %define devname %mklibname %{name} -d
-%define lib32name %mklib32name %{name} %{major}
+%define oldlib32name %mklib32name %{name} 1
+%define lib32name %mklib32name %{name}
 %define dev32name %mklib32name %{name} -d
 
 Summary:	3D Sound Library
 Name:		openal
 Version:	1.24.2
-Release:	1
+Release:	2
 License:	LGPLv2
 Group:		Sound
 Url:		https://github.com/kcat/openal-soft
@@ -26,6 +28,8 @@ Source1:	openal.rpmlintrc
 # Same behavior observed when building with gcc 10.1, regardless of linker.
 #Patch0:		openal-1.20.1-no-visibility-protected.patch
 #Patch0:      https://github.com/kcat/openal-soft/commit/5d2c405c4aea0b6dbcfbcfe147b6a17855627acf.patch
+Patch0:		openal-1.20.1-qt6.patch
+Patch1:		openal-1.24.2-system-fmt.patch
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	ffmpeg-devel
@@ -33,9 +37,10 @@ BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(portaudio-2.0)
 BuildRequires:	pkgconfig(sdl2)
+BuildRequires:	pkgconfig(fmt)
 BuildRequires:	SDL_sound-devel
-BuildRequires:	qmake5
-BuildRequires:	cmake(Qt5Widgets)
+BuildRequires:	qmake-qt6
+BuildRequires:	cmake(Qt6Widgets)
 BuildRequires:	ninja
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	pkgconfig(libmysofa)
@@ -67,6 +72,8 @@ This package contains a configuration tool and configuration files for OpenAL
 Summary:	Main library for OpenAL, a free 3D sound library
 Group:		System/Libraries
 Suggests:	%{name} >= %{version}-%{release}
+# Renamed 2025/03/06 before 6.0
+%rename %{oldlibname}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
@@ -88,6 +95,8 @@ applications which will use OpenAL, a free 3D audio library.
 Summary:	Main library for OpenAL, a free 3D sound library (32-bit)
 Group:		System/Libraries
 Suggests:	%{name} >= %{version}-%{release}
+# Renamed 2025/03/06 before 6.0
+%rename %{oldlib32name}
 
 %description -n %{lib32name}
 This package contains the library needed to run programs dynamically
@@ -107,22 +116,30 @@ applications which will use OpenAL, a free 3D audio library.
 %prep
 %autosetup -n %{oname}-%{version} -p1
 %if %{with compat32}
-%cmake32 -DALSOFT_INSTALL_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake -G Ninja
+%cmake32 -DALSOFT_INSTALL_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt6/bin/qmake -G Ninja
 cd ..
 %endif
-%cmake -DALSOFT_INSTALL_CONFIG=ON -DALSOFT_EXAMPLES=ON -DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt5/bin/qmake -G Ninja
+# Just to make sure we don't accidentally mix old (bundled) headers and current libs
+mkdir -p disabled/old ; mv fmt-11.* disabled/old
+%cmake -DALSOFT_INSTALL_CONFIG=ON -DALSOFT_EXAMPLES=ON -DALSOFT_USE_SYSTEM_FMT:BOOL=ON -DQT_QMAKE_EXECUTABLE=%{_libdir}/qt6/bin/qmake -G Ninja
+cd ..
+mv disabled/old/fmt* .
 
 %build
 %if %{with compat32}
 %ninja_build -C build32
 %endif
+mv fmt-11.* disabled/old
 %ninja_build -C build
+mv disabled/old/fmt-11.* .
 
 %install
 %if %{with compat32}
 %ninja_install -C build32
 %endif
+mv fmt-11.* disabled/old
 %ninja_install -C build
+mv disabled/old/fmt-11.* .
 mkdir -p %{buildroot}/%{_sysconfdir}/%{name}
 install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
 

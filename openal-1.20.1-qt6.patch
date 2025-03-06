@@ -1,0 +1,53 @@
+diff -up openal-soft-1.24.2/CMakeLists.txt.omv~ openal-soft-1.24.2/CMakeLists.txt
+--- openal-soft-1.24.2/CMakeLists.txt.omv~	2025-03-06 18:34:43.179189301 +0100
++++ openal-soft-1.24.2/CMakeLists.txt	2025-03-06 18:35:00.206608750 +0100
+@@ -1308,9 +1308,9 @@ endif()
+ if(ALSOFT_UTILS)
+     find_package(MySOFA)
+     if(NOT ALSOFT_NO_CONFIG_UTIL)
+-        find_package(Qt5Widgets QUIET)
+-        if(NOT Qt5Widgets_FOUND)
+-            message(STATUS "Could NOT find Qt5Widgets")
++        find_package(Qt6Widgets QUIET)
++        if(NOT Qt6Widgets_FOUND)
++            message(STATUS "Could NOT find Qt6Widgets")
+         endif()
+     endif()
+ endif()
+diff -up openal-soft-1.24.2/utils/alsoft-config/CMakeLists.txt.omv~ openal-soft-1.24.2/utils/alsoft-config/CMakeLists.txt
+--- openal-soft-1.24.2/utils/alsoft-config/CMakeLists.txt.omv~	2025-03-06 18:35:07.009776343 +0100
++++ openal-soft-1.24.2/utils/alsoft-config/CMakeLists.txt	2025-03-06 18:35:19.557085593 +0100
+@@ -1,9 +1,9 @@
+ project(alsoft-config)
+ 
+-if(Qt5Widgets_FOUND)
+-    qt5_wrap_ui(UIS  mainwindow.ui)
++if(Qt6Widgets_FOUND)
++    qt6_wrap_ui(UIS  mainwindow.ui)
+ 
+-    qt5_wrap_cpp(MOCS  mainwindow.h)
++    qt6_wrap_cpp(MOCS  mainwindow.h)
+ 
+     add_executable(alsoft-config
+         main.cpp
+@@ -12,7 +12,7 @@ if(Qt5Widgets_FOUND)
+         verstr.cpp
+         verstr.h
+         ${UIS} ${RSCS} ${TRS} ${MOCS})
+-    target_link_libraries(alsoft-config PUBLIC Qt5::Widgets PRIVATE alsoft.common)
++    target_link_libraries(alsoft-config PUBLIC Qt6::Widgets PRIVATE alsoft.common)
+     target_include_directories(alsoft-config PRIVATE "${alsoft-config_BINARY_DIR}"
+         "${OpenAL_BINARY_DIR}")
+     target_compile_definitions(alsoft-config PRIVATE QT_NO_KEYWORDS)
+diff -up openal-soft-1.24.2/utils/alsoft-config/mainwindow.cpp.omv~ openal-soft-1.24.2/utils/alsoft-config/mainwindow.cpp
+--- openal-soft-1.24.2/utils/alsoft-config/mainwindow.cpp.omv~	2025-03-06 18:41:44.793545278 +0100
++++ openal-soft-1.24.2/utils/alsoft-config/mainwindow.cpp	2025-03-06 18:44:31.366791694 +0100
+@@ -879,7 +879,7 @@ void MainWindow::loadConfig(const QStrin
+             }
+             else if(backend.size() > 1)
+             {
+-                QStringRef backendref{backend.rightRef(backend.size()-1)};
++                QStringView backendref{QStringView{backend}.right(backend.size()-1)};
+                 for(size_t j{0};j < backendList.size();++j)
+                 {
+                     if(backendref == std::data(backendList[j].backend_name))
