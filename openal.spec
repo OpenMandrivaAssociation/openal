@@ -29,7 +29,7 @@ Source1:	openal.rpmlintrc
 #Patch0:		openal-1.20.1-no-visibility-protected.patch
 #Patch0:      https://github.com/kcat/openal-soft/commit/5d2c405c4aea0b6dbcfbcfe147b6a17855627acf.patch
 Patch0:		openal-1.20.1-qt6.patch
-Patch1:		openal-1.24.2-system-fmt.patch
+#Patch1:		openal-1.24.2-system-fmt.patch
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	ffmpeg-devel
