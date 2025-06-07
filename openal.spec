@@ -17,7 +17,7 @@
 Summary:	3D Sound Library
 Name:		openal
 Version:	1.24.2
-Release:	2
+Release:	3
 License:	LGPLv2
 Group:		Sound
 Url:		https://github.com/kcat/openal-soft
@@ -33,6 +33,7 @@ Patch1:		openal-1.24.2-system-fmt.patch
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	ffmpeg-devel
+BuildRequires:	pkgconfig(libpipewire-0.3)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(portaudio-2.0)
@@ -51,6 +52,7 @@ Provides:	%{oname} = %{version}-%{release}
 BuildRequires:	devel(libSDL2-2.0)
 BuildRequires:	devel(libsndfile)
 BuildRequires:	devel(libz)
+BuildRequires:	devel(libpipewire-0.3)
 BuildRequires:	devel(libpulse)
 BuildRequires:	devel(libdbus-1)
 BuildRequires:	devel(libavformat)
