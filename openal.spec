@@ -51,7 +51,6 @@ BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(sdl3)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sndio)
-BuildRequires:	pkgconfig(zlib)
 %if %{with compat32}
 BuildRequires:	devel(libatomic)
 BuildRequires:	devel(libavformat)
@@ -60,7 +59,7 @@ BuildRequires:	devel(libpipewire-0.3)
 BuildRequires:	devel(libpulse)
 BuildRequires:	devel(libSDL2-2.0)
 BuildRequires:	devel(libsndfile)
-BuildRequires:	devel(zlib)
+BuildRequires:	devel(libz)
 %endif
 Requires:	%{name}-config >= %{version}-%{release}
 Provides:	%{oname} = %{version}-%{release}
