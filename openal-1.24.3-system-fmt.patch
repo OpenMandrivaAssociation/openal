@@ -1,18 +1,15 @@
-diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
---- openal-soft-1.24.2/CMakeLists.txt.2~	2025-03-06 18:51:32.254521213 +0100
-+++ openal-soft-1.24.2/CMakeLists.txt	2025-03-06 19:01:44.085196325 +0100
-@@ -100,9 +100,8 @@ include(GNUInstallDirs)
- find_package(PkgConfig)
+diff -rupN openal-soft-1.24.3.old/CMakeLists.txt openal-soft-1.24.3/CMakeLists.txt
+--- openal-soft-1.24.3.old/CMakeLists.txt	2025-08-06 14:40:04.118705618 +0200
++++ openal-soft-1.24.3/CMakeLists.txt	2025-08-06 14:47:36.506643613 +0200
+@@ -102,6 +102,7 @@ find_package(PkgConfig)
  find_package(SDL3 QUIET)
  
--add_subdirectory(fmt-11.1.1 EXCLUDE_FROM_ALL)
--
  option(ALSOFT_DLOPEN  "Check for the dlopen API for loading optional libs"  ON)
 +option(ALSOFT_USE_SYSTEM_FMT "Use system wide fmt installation" OFF)
  
  option(ALSOFT_WERROR  "Treat compile warnings as errors"      OFF)
  
-@@ -145,6 +144,15 @@ if(DEFINED ALSOFT_AMBDEC_PRESETS)
+@@ -144,6 +145,15 @@ if(DEFINED ALSOFT_AMBDEC_PRESETS)
      message(WARNING "ALSOFT_AMBDEC_PRESETS is deprecated. Use ALSOFT_INSTALL_AMBDEC_PRESETS instead")
  endif()
  
@@ -25,16 +22,18 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
 +    set(FMT_LOCAL_INTERFACE $<BUILD_LOCAL_INTERFACE:alsoft::fmt>)
 +endif()
 +
+ if(MSVC)
+     option(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
+     if(FORCE_STATIC_VCRT)
+@@ -159,7 +169,6 @@ if(MSVC)
+     endif()
+ endif()
+ 
+-add_subdirectory(fmt-11.1.1 EXCLUDE_FROM_ALL)
+ 
  
  set(CPP_DEFS ) # C pre-processor, not C++
- set(INC_PATHS )
-@@ -1369,13 +1377,12 @@ configure_file(
-     "${OpenAL_BINARY_DIR}/openal.pc"
-     @ONLY)
- 
--
- add_library(alsoft.common STATIC EXCLUDE_FROM_ALL ${COMMON_OBJS})
- target_include_directories(alsoft.common PRIVATE ${OpenAL_SOURCE_DIR}/include
+@@ -1402,7 +1411,7 @@ target_include_directories(alsoft.common
      PUBLIC ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
  target_compile_definitions(alsoft.common PRIVATE ${CPP_DEFS})
  target_compile_options(alsoft.common PRIVATE ${C_FLAGS})
@@ -43,7 +42,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
  set_target_properties(alsoft.common PROPERTIES ${ALSOFT_STD_VERSION_PROPS}
      POSITION_INDEPENDENT_CODE TRUE)
  
-@@ -1404,7 +1411,7 @@ if(LIBTYPE STREQUAL "STATIC")
+@@ -1431,7 +1440,7 @@ if(LIBTYPE STREQUAL "STATIC")
      add_library(${IMPL_TARGET} STATIC ${COMMON_OBJS} ${OPENAL_OBJS} ${ALC_OBJS} ${CORE_OBJS})
      target_compile_definitions(${IMPL_TARGET} PUBLIC AL_LIBTYPE_STATIC)
      target_link_libraries(${IMPL_TARGET} PRIVATE ${LINKER_FLAGS} ${EXTRA_LIBS} ${MATH_LIB}
@@ -52,7 +51,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
  
      if(WIN32)
          # This option is for static linking OpenAL Soft into another project
-@@ -1429,7 +1436,7 @@ else()
+@@ -1456,7 +1465,7 @@ else()
              PRIVATE AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES "ALC_API=${EXPORT_DECL}"
              "AL_API=${EXPORT_DECL}" ${CPP_DEFS})
          target_compile_options(OpenAL PRIVATE ${C_FLAGS})
@@ -61,7 +60,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
          target_include_directories(OpenAL
            PUBLIC
              $<BUILD_INTERFACE:${OpenAL_SOURCE_DIR}/include>
-@@ -1461,7 +1468,7 @@ else()
+@@ -1488,7 +1497,7 @@ else()
          set_target_properties(${IMPL_TARGET} PROPERTIES PREFIX "")
      endif()
      target_link_libraries(${IMPL_TARGET} PRIVATE alsoft.common ${LINKER_FLAGS} ${EXTRA_LIBS}
@@ -70,7 +69,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
  
      if(ALSOFT_UWP)
          find_package(cppwinrt CONFIG)
-@@ -1688,7 +1695,7 @@ if(ALSOFT_UTILS)
+@@ -1715,7 +1724,7 @@ if(ALSOFT_UTILS)
              PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
          target_compile_options(uhjdecoder PRIVATE ${C_FLAGS})
          target_link_libraries(uhjdecoder PUBLIC alsoft.common
@@ -79,7 +78,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
          set_target_properties(uhjdecoder PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
  
          add_executable(uhjencoder utils/uhjencoder.cpp)
-@@ -1697,7 +1704,7 @@ if(ALSOFT_UTILS)
+@@ -1724,7 +1733,7 @@ if(ALSOFT_UTILS)
              PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
          target_compile_options(uhjencoder PRIVATE ${C_FLAGS})
          target_link_libraries(uhjencoder PUBLIC alsoft.common
@@ -88,7 +87,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
          set_target_properties(uhjencoder PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
      endif()
  
-@@ -1710,7 +1717,7 @@ if(ALSOFT_UTILS)
+@@ -1737,7 +1746,7 @@ if(ALSOFT_UTILS)
          target_include_directories(alsoft.sofa-support PUBLIC ${OpenAL_SOURCE_DIR}/common)
          target_compile_options(alsoft.sofa-support PRIVATE ${C_FLAGS})
          target_link_libraries(alsoft.sofa-support PUBLIC alsoft.common MySOFA::MySOFA
@@ -97,7 +96,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
          set_target_properties(alsoft.sofa-support PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
  
          set(MAKEMHR_SRCS
-@@ -1726,7 +1733,7 @@ if(ALSOFT_UTILS)
+@@ -1753,7 +1762,7 @@ if(ALSOFT_UTILS)
              PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/utils)
          target_compile_options(makemhr PRIVATE ${C_FLAGS})
          target_link_libraries(makemhr PRIVATE ${LINKER_FLAGS} alsoft.sofa-support ${UNICODE_FLAG}
@@ -106,7 +105,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
          set_target_properties(makemhr PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
          if(ALSOFT_INSTALL_EXAMPLES)
              set(EXTRA_INSTALLS ${EXTRA_INSTALLS} makemhr)
-@@ -1738,7 +1745,7 @@ if(ALSOFT_UTILS)
+@@ -1765,7 +1774,7 @@ if(ALSOFT_UTILS)
          target_include_directories(sofa-info PRIVATE ${OpenAL_SOURCE_DIR}/utils)
          target_compile_options(sofa-info PRIVATE ${C_FLAGS})
          target_link_libraries(sofa-info PRIVATE ${LINKER_FLAGS} alsoft.sofa-support
@@ -115,7 +114,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
          set_target_properties(sofa-info PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
      endif()
      message(STATUS "Building utility programs")
-@@ -1772,12 +1779,12 @@ if(ALSOFT_EXAMPLES)
+@@ -1799,12 +1808,12 @@ if(ALSOFT_EXAMPLES)
  
      add_executable(aldebug examples/aldebug.cpp)
      target_link_libraries(aldebug PRIVATE ${LINKER_FLAGS} alsoft.excommon ${UNICODE_FLAG}
@@ -130,7 +129,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
      set_target_properties(allafplay PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
  
      if(ALSOFT_INSTALL_EXAMPLES)
-@@ -1819,12 +1826,12 @@ if(ALSOFT_EXAMPLES)
+@@ -1846,12 +1855,12 @@ if(ALSOFT_EXAMPLES)
  
          add_executable(alstreamcb examples/alstreamcb.cpp)
          target_link_libraries(alstreamcb PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
@@ -145,7 +144,7 @@ diff -up openal-soft-1.24.2/CMakeLists.txt.2~ openal-soft-1.24.2/CMakeLists.txt
          set_target_properties(aldirect PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
  
          add_executable(alconvolve examples/alconvolve.c)
-@@ -1881,7 +1888,7 @@ if(ALSOFT_EXAMPLES)
+@@ -1908,7 +1917,7 @@ if(ALSOFT_EXAMPLES)
              add_executable(alffplay examples/alffplay.cpp)
              target_include_directories(alffplay PRIVATE ${FFMPEG_INCLUDE_DIRS})
              target_link_libraries(alffplay
