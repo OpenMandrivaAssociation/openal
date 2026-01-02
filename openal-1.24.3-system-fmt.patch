@@ -1,15 +1,18 @@
-diff -rupN openal-soft-1.24.3.old/CMakeLists.txt openal-soft-1.24.3/CMakeLists.txt
---- openal-soft-1.24.3.old/CMakeLists.txt	2025-08-06 14:40:04.118705618 +0200
-+++ openal-soft-1.24.3/CMakeLists.txt	2025-08-06 14:47:36.506643613 +0200
-@@ -102,6 +102,7 @@ find_package(PkgConfig)
- find_package(SDL3 QUIET)
+# This patch is used to unbundle fmt by fetching the system-wide
+# fmt with cmake.
+
+diff -up a/CMakeLists.txt.orig b/CMakeLists.txt
+--- a/CMakeLists.txt.orig	2025-01-11 08:17:23.000000000 +0100
++++ b/CMakeLists.txt	2025-01-30 19:50:31.691247492 +0100
+@@ -84,6 +84,7 @@ find_package(SDL3 QUIET)
  
  option(ALSOFT_DLOPEN  "Check for the dlopen API for loading optional libs"  ON)
+ option(ALSOFT_DLOPEN_NOTES  "Record dlopen dependencies in .note.dlopen section"  ${UNIX_ELF})
 +option(ALSOFT_USE_SYSTEM_FMT "Use system wide fmt installation" OFF)
  
  option(ALSOFT_WERROR  "Treat compile warnings as errors"      OFF)
  
-@@ -144,6 +145,15 @@ if(DEFINED ALSOFT_AMBDEC_PRESETS)
+@@ -126,6 +127,15 @@ if(DEFINED ALSOFT_AMBDEC_PRESETS)
      message(WARNING "ALSOFT_AMBDEC_PRESETS is deprecated. Use ALSOFT_INSTALL_AMBDEC_PRESETS instead")
  endif()
  
@@ -17,7 +20,7 @@ diff -rupN openal-soft-1.24.3.old/CMakeLists.txt openal-soft-1.24.3/CMakeLists.t
 +    set(FMT_LIB fmt)
 +    set(FMT_LOCAL_INTERFACE fmt)
 +else()
-+    add_subdirectory(fmt-11.1.1 EXCLUDE_FROM_ALL)
++    add_subdirectory(fmt-11.2.0 EXCLUDE_FROM_ALL)
 +    set(FMT_LIB alsoft::fmt)
 +    set(FMT_LOCAL_INTERFACE $<BUILD_LOCAL_INTERFACE:alsoft::fmt>)
 +endif()
@@ -25,42 +28,53 @@ diff -rupN openal-soft-1.24.3.old/CMakeLists.txt openal-soft-1.24.3/CMakeLists.t
  if(MSVC)
      option(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
      if(FORCE_STATIC_VCRT)
-@@ -159,7 +169,6 @@ if(MSVC)
-     endif()
+@@ -256,9 +266,6 @@ if(ALSOFT_ENABLE_MODULES)
  endif()
  
--add_subdirectory(fmt-11.1.1 EXCLUDE_FROM_ALL)
  
- 
+-add_subdirectory(fmt-11.2.0 EXCLUDE_FROM_ALL)
+-
+-
  set(CPP_DEFS ) # C pre-processor, not C++
-@@ -1402,7 +1411,7 @@ target_include_directories(alsoft.common
-     PUBLIC ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
+ set(INC_PATHS )
+ set(C_FLAGS )
+@@ -1566,7 +1573,7 @@ target_include_directories(alsoft.common
+     PUBLIC ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common ${OpenAL_SOURCE_DIR}/gsl/include)
  target_compile_definitions(alsoft.common PRIVATE ${CPP_DEFS})
  target_compile_options(alsoft.common PRIVATE ${C_FLAGS})
 -target_link_libraries(alsoft.common PRIVATE alsoft::fmt)
 +target_link_libraries(alsoft.common PRIVATE ${FMT_LIB})
  set_target_properties(alsoft.common PROPERTIES ${ALSOFT_STD_VERSION_PROPS}
      POSITION_INDEPENDENT_CODE TRUE)
- 
-@@ -1431,7 +1440,7 @@ if(LIBTYPE STREQUAL "STATIC")
-     add_library(${IMPL_TARGET} STATIC ${COMMON_OBJS} ${OPENAL_OBJS} ${ALC_OBJS} ${CORE_OBJS})
+ if(HAVE_CXXMODULES)
+@@ -1605,7 +1612,7 @@ if(LIBTYPE STREQUAL "STATIC")
      target_compile_definitions(${IMPL_TARGET} PUBLIC AL_LIBTYPE_STATIC)
+     target_include_directories(${IMPL_TARGET} PRIVATE ${OpenAL_SOURCE_DIR}/gsl/include)
      target_link_libraries(${IMPL_TARGET} PRIVATE ${LINKER_FLAGS} ${EXTRA_LIBS} ${MATH_LIB}
 -        $<BUILD_LOCAL_INTERFACE:alsoft::fmt>)
 +        ${FMT_LOCAL_INTERFACE})
  
-     if(WIN32)
-         # This option is for static linking OpenAL Soft into another project
-@@ -1456,7 +1465,7 @@ else()
+     if(CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND DEFINED CMAKE_OSX_DEPLOYMENT_TARGET
+         AND CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS "10.13")
+@@ -1633,7 +1640,7 @@ else()
+             target_compile_definitions(alsoft.router-modules PRIVATE AL_ALEXT_PROTOTYPES
+                 "ALC_API=${EXPORT_DECL}" "AL_API=${EXPORT_DECL}" ${CPP_DEFS})
+             target_compile_options(alsoft.router-modules PRIVATE ${C_FLAGS})
+-            target_link_libraries(alsoft.router-modules PRIVATE alsoft::fmt alsoft.modules)
++            target_link_libraries(alsoft.router-modules PRIVATE ${FMT_LIB} alsoft.modules)
+             set_target_properties(alsoft.router-modules PROPERTIES ${ALSOFT_STD_VERSION_PROPS}
+                 POSITION_INDEPENDENT_CODE TRUE)
+             list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/alsoft-modules/router.cppm")
+@@ -1650,7 +1657,7 @@ else()
              PRIVATE AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES "ALC_API=${EXPORT_DECL}"
              "AL_API=${EXPORT_DECL}" ${CPP_DEFS})
          target_compile_options(OpenAL PRIVATE ${C_FLAGS})
--        target_link_libraries(OpenAL PRIVATE alsoft.common ${LINKER_FLAGS} alsoft::fmt)
-+        target_link_libraries(OpenAL PRIVATE alsoft.common ${LINKER_FLAGS} ${FMT_LIB})
+-        target_link_libraries(OpenAL PRIVATE alsoft.common ${LINKER_FLAGS} alsoft::fmt
++        target_link_libraries(OpenAL PRIVATE alsoft.common ${LINKER_FLAGS} ${FMT_LIB}
+             $<$<BOOL:${HAVE_CXXMODULES}>:alsoft.modules alsoft.router-modules>)
          target_include_directories(OpenAL
            PUBLIC
-             $<BUILD_INTERFACE:${OpenAL_SOURCE_DIR}/include>
-@@ -1488,7 +1497,7 @@ else()
+@@ -1683,7 +1690,7 @@ else()
          set_target_properties(${IMPL_TARGET} PROPERTIES PREFIX "")
      endif()
      target_link_libraries(${IMPL_TARGET} PRIVATE alsoft.common ${LINKER_FLAGS} ${EXTRA_LIBS}
@@ -69,87 +83,89 @@ diff -rupN openal-soft-1.24.3.old/CMakeLists.txt openal-soft-1.24.3/CMakeLists.t
  
      if(ALSOFT_UWP)
          find_package(cppwinrt CONFIG)
-@@ -1715,7 +1724,7 @@ if(ALSOFT_UTILS)
+@@ -1917,7 +1924,7 @@ if(ALSOFT_UTILS)
              PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
          target_compile_options(uhjdecoder PRIVATE ${C_FLAGS})
          target_link_libraries(uhjdecoder PUBLIC alsoft.common
 -            PRIVATE ${LINKER_FLAGS} SndFile::SndFile ${UNICODE_FLAG} alsoft::fmt)
 +            PRIVATE ${LINKER_FLAGS} SndFile::SndFile ${UNICODE_FLAG} ${FMT_LIB})
          set_target_properties(uhjdecoder PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
+         list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/utils/uhjdecoder.cpp")
  
-         add_executable(uhjencoder utils/uhjencoder.cpp)
-@@ -1724,7 +1733,7 @@ if(ALSOFT_UTILS)
+@@ -1927,7 +1934,7 @@ if(ALSOFT_UTILS)
              PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
          target_compile_options(uhjencoder PRIVATE ${C_FLAGS})
          target_link_libraries(uhjencoder PUBLIC alsoft.common
 -            PRIVATE ${LINKER_FLAGS} SndFile::SndFile ${UNICODE_FLAG} alsoft::fmt)
 +            PRIVATE ${LINKER_FLAGS} SndFile::SndFile ${UNICODE_FLAG} ${FMT_LIB})
          set_target_properties(uhjencoder PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
+         list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/utils/uhjencoder.cpp")
      endif()
- 
-@@ -1737,7 +1746,7 @@ if(ALSOFT_UTILS)
+@@ -1941,7 +1948,7 @@ if(ALSOFT_UTILS)
          target_include_directories(alsoft.sofa-support PUBLIC ${OpenAL_SOURCE_DIR}/common)
          target_compile_options(alsoft.sofa-support PRIVATE ${C_FLAGS})
          target_link_libraries(alsoft.sofa-support PUBLIC alsoft.common MySOFA::MySOFA
 -            PRIVATE ${LINKER_FLAGS} alsoft::fmt)
 +            PRIVATE ${LINKER_FLAGS} ${FMT_LIB})
          set_target_properties(alsoft.sofa-support PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
- 
-         set(MAKEMHR_SRCS
-@@ -1753,7 +1762,7 @@ if(ALSOFT_UTILS)
+         list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/utils/sofa-support.cpp"
+             "${CMAKE_SOURCE_DIR}/utils/sofa-support.h")
+@@ -1959,7 +1966,7 @@ if(ALSOFT_UTILS)
              PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/utils)
          target_compile_options(makemhr PRIVATE ${C_FLAGS})
          target_link_libraries(makemhr PRIVATE ${LINKER_FLAGS} alsoft.sofa-support ${UNICODE_FLAG}
 -            alsoft::fmt)
 +            ${FMT_LIB})
          set_target_properties(makemhr PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
-         if(ALSOFT_INSTALL_EXAMPLES)
-             set(EXTRA_INSTALLS ${EXTRA_INSTALLS} makemhr)
-@@ -1765,7 +1774,7 @@ if(ALSOFT_UTILS)
-         target_include_directories(sofa-info PRIVATE ${OpenAL_SOURCE_DIR}/utils)
+         list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/utils/makemhr/loaddef.cpp"
+             "${CMAKE_SOURCE_DIR}/utils/makemhr/loaddef.h"
+@@ -1978,7 +1985,7 @@ if(ALSOFT_UTILS)
+             PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/utils)
          target_compile_options(sofa-info PRIVATE ${C_FLAGS})
-         target_link_libraries(sofa-info PRIVATE ${LINKER_FLAGS} alsoft.sofa-support
+         target_link_libraries(sofa-info PRIVATE alsoft.common ${LINKER_FLAGS} alsoft.sofa-support
 -            ${UNICODE_FLAG} alsoft::fmt)
 +            ${UNICODE_FLAG} ${FMT_LIB})
          set_target_properties(sofa-info PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
+         list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/utils/sofa-info.cpp")
      endif()
-     message(STATUS "Building utility programs")
-@@ -1799,12 +1808,12 @@ if(ALSOFT_EXAMPLES)
+@@ -2034,13 +2041,13 @@ if(ALSOFT_EXAMPLES)
  
      add_executable(aldebug examples/aldebug.cpp)
-     target_link_libraries(aldebug PRIVATE ${LINKER_FLAGS} alsoft.excommon ${UNICODE_FLAG}
--        alsoft::fmt)
-+        ${FMT_LIB})
+     target_link_libraries(aldebug PRIVATE ${LINKER_FLAGS} alsoft.common alsoft.excommon
+-        ${UNICODE_FLAG} alsoft::fmt ${MODULES_TARGET})
++        ${UNICODE_FLAG} ${FMT_LIB} ${MODULES_TARGET})
      set_target_properties(aldebug PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
+     list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/examples/aldebug.cpp")
  
      add_executable(allafplay examples/allafplay.cpp)
      target_link_libraries(allafplay PRIVATE ${LINKER_FLAGS} alsoft.common alsoft.excommon
--        ${UNICODE_FLAG} alsoft::fmt)
-+        ${UNICODE_FLAG} ${FMT_LIB})
+-        ${UNICODE_FLAG} alsoft::fmt ${MODULES_TARGET})
++        ${UNICODE_FLAG} ${FMT_LIB} ${MODULES_TARGET})
      set_target_properties(allafplay PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
+     list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/examples/allafplay.cpp")
  
-     if(ALSOFT_INSTALL_EXAMPLES)
-@@ -1846,12 +1855,12 @@ if(ALSOFT_EXAMPLES)
+@@ -2089,13 +2096,13 @@ if(ALSOFT_EXAMPLES)
  
          add_executable(alstreamcb examples/alstreamcb.cpp)
-         target_link_libraries(alstreamcb PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
--            ${UNICODE_FLAG} alsoft::fmt)
-+            ${UNICODE_FLAG} ${FMT_LIB})
+         target_link_libraries(alstreamcb PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.common
+-            alsoft.excommon ${UNICODE_FLAG} alsoft::fmt ${MODULES_TARGET})
++            alsoft.excommon ${UNICODE_FLAG} ${FMT_LIB} ${MODULES_TARGET})
          set_target_properties(alstreamcb PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
+         list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/examples/alstreamcb.cpp")
  
          add_executable(aldirect examples/aldirect.cpp)
-         target_link_libraries(aldirect PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
--            ${UNICODE_FLAG} alsoft::fmt)
-+            ${UNICODE_FLAG} ${FMT_LIB})
+         target_link_libraries(aldirect PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.common
+-            alsoft.excommon ${UNICODE_FLAG} alsoft::fmt ${MODULES_TARGET})
++            alsoft.excommon ${UNICODE_FLAG} ${FMT_LIB} ${MODULES_TARGET})
          set_target_properties(aldirect PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
+         list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/examples/aldirect.cpp")
  
-         add_executable(alconvolve examples/alconvolve.c)
-@@ -1908,7 +1917,7 @@ if(ALSOFT_EXAMPLES)
-             add_executable(alffplay examples/alffplay.cpp)
+@@ -2156,7 +2163,7 @@ if(ALSOFT_EXAMPLES)
              target_include_directories(alffplay PRIVATE ${FFMPEG_INCLUDE_DIRS})
              target_link_libraries(alffplay
--                PRIVATE ${LINKER_FLAGS} SDL3::SDL3 ${FFMPEG_LIBRARIES} alsoft.excommon alsoft::fmt)
-+                PRIVATE ${LINKER_FLAGS} SDL3::SDL3 ${FFMPEG_LIBRARIES} alsoft.excommon ${FMT_LIB})
+                 PRIVATE ${LINKER_FLAGS} SDL3::SDL3 ${FFMPEG_LIBRARIES} alsoft.common
+-                alsoft.excommon alsoft::fmt ${MODULES_TARGET})
++                alsoft.excommon ${FMT_LIB} ${MODULES_TARGET})
              set_target_properties(alffplay PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
+             list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/examples/alffplay.cpp")
  
-             if(ALSOFT_INSTALL_EXAMPLES)

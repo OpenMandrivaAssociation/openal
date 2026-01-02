@@ -16,15 +16,16 @@
 
 Summary:	3D Sound Library
 Name:	openal
-Version:	1.24.3
-Release:	2
+Version:	1.25.0
+Release:	1
 License:	LGPLv2
 Group:	Sound
 Url:		https://github.com/kcat/openal-soft
 Source0:	https://github.com/kcat/openal-soft/archive/%{version}/%{oname}-%{version}.tar.gz
 Source1:	openal.rpmlintrc
-Patch0:		openal-1.20.1-qt6.patch
+#Patch0:		openal-1.20.1-qt6.patch
 Patch1:		openal-1.24.3-system-fmt.patch
+BuildRequires:	clang-tools
 BuildRequires:	cmake
 BuildRequires:	git
 BuildRequires:	ninja
