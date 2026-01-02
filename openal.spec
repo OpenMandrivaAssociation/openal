@@ -25,6 +25,7 @@ Source0:	https://github.com/kcat/openal-soft/archive/%{version}/%{oname}-%{versi
 Source1:	openal.rpmlintrc
 #Patch0:		openal-1.20.1-qt6.patch
 Patch1:		openal-1.24.3-system-fmt.patch
+BuildRequires:	clang-tools
 BuildRequires:	cmake
 BuildRequires:	git
 BuildRequires:	ninja
