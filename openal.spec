@@ -17,7 +17,7 @@
 Summary:	3D Sound Library
 Name:	openal
 Version:	1.25.2
-Release:	2
+Release:	3
 License:	LGPLv2
 Group:	Sound
 Url:		https://github.com/kcat/openal-soft
@@ -180,40 +180,34 @@ applications which will use OpenAL, a free 3D audio library.
 
 %prep
 %autosetup -n %{oname}-%{version} -p1
+# openal-soft 1.25.2 always builds against bundled fmt-11.x (no ALSOFT_USE_SYSTEM_FMT)
 %if %{with compat32}
 %cmake32 -DALSOFT_INSTALL_CONFIG=ON \
 					-DALSOFT_EXAMPLES=ON \
+					-DALSOFT_BACKEND_SNDIO:BOOL=ON \
 					-DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt6/bin/qmake \
 					-G Ninja
 cd ..
 %endif
-# Just to make sure we don't accidentally mix old (bundled) headers and current libs
-mkdir -p disabled/old ; mv fmt-11.* disabled/old
 %cmake -DALSOFT_INSTALL_CONFIG=ON \
 				-DALSOFT_EXAMPLES=ON \
-				-DALSOFT_USE_SYSTEM_FMT:BOOL=ON \
 				-DALSOFT_BACKEND_SNDIO:BOOL=ON \
 				-DQT_QMAKE_EXECUTABLE=%{_libdir}/qt6/bin/qmake \
 				-G Ninja
 cd ..
-mv disabled/old/fmt* .
 
 
 %build
 %if %{with compat32}
 %ninja_build -C build32
 %endif
-mv fmt-11.* disabled/old
 %ninja_build -C build
-mv disabled/old/fmt-11.* .
 
 
 %install
 %if %{with compat32}
 %ninja_install -C build32
 %endif
-mv fmt-11.* disabled/old
 %ninja_install -C build
-mv disabled/old/fmt-11.* .
 mkdir -p %{buildroot}/%{_sysconfdir}/%{name}
 install -m 0644 alsoftrc.sample %{buildroot}/%{_sysconfdir}/%{name}/alsoft.conf
