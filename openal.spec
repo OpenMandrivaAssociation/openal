@@ -18,7 +18,7 @@ Summary:	3D Sound Library
 %global optflags %{optflags} -Wno-function-effects
 Name:	openal
 Version:	1.25.2
-Release:	4
+Release:	5
 License:	LGPLv2
 Group:	Sound
 Url:		https://github.com/kcat/openal-soft
@@ -183,7 +183,7 @@ applications which will use OpenAL, a free 3D audio library.
 %autosetup -n %{oname}-%{version} -p1
 # openal-soft 1.25.2 always builds against bundled fmt-11.x (no ALSOFT_USE_SYSTEM_FMT)
 %if %{with compat32}
-%cmake32 -DCMAKE_CXX_FLAGS="%{optflags} -Wno-function-effects" \
+%cmake32 -DCMAKE_CXX_FLAGS="-Wno-function-effects" \
 					-DALSOFT_INSTALL_CONFIG=ON \
 					-DALSOFT_EXAMPLES=ON \
 					-DALSOFT_BACKEND_SNDIO:BOOL=ON \
@@ -191,7 +191,7 @@ applications which will use OpenAL, a free 3D audio library.
 					-G Ninja
 cd ..
 %endif
-%cmake -DCMAKE_CXX_FLAGS="%{optflags} -Wno-function-effects" \
+%cmake -DCMAKE_CXX_FLAGS="-Wno-function-effects" \
 				-DALSOFT_INSTALL_CONFIG=ON \
 				-DALSOFT_EXAMPLES=ON \
 				-DALSOFT_BACKEND_SNDIO:BOOL=ON \
