@@ -15,10 +15,11 @@
 %define	dev32name %mklib32name %{name} -d
 
 Summary:	3D Sound Library
-%global optflags %{optflags} -Wno-function-effects
+# Clang 23 treats openal-soft's nonblocking attributes as errors via -Wfunction-effects
+%global optflags %{optflags} -Wno-function-effects -Wno-error=function-effects
 Name:	openal
 Version:	1.25.2
-Release:	5
+Release:	6
 License:	LGPLv2
 Group:	Sound
 Url:		https://github.com/kcat/openal-soft
@@ -182,17 +183,17 @@ applications which will use OpenAL, a free 3D audio library.
 %prep
 %autosetup -n %{oname}-%{version} -p1
 # openal-soft 1.25.2 always builds against bundled fmt-11.x (no ALSOFT_USE_SYSTEM_FMT)
+# Do not pass -DCMAKE_CXX_FLAGS here: it overrides %cmake32's -m32 flags.
+# -Wno-function-effects comes from %global optflags above.
 %if %{with compat32}
-%cmake32 -DCMAKE_CXX_FLAGS="-Wno-function-effects" \
-					-DALSOFT_INSTALL_CONFIG=ON \
+%cmake32 -DALSOFT_INSTALL_CONFIG=ON \
 					-DALSOFT_EXAMPLES=ON \
 					-DALSOFT_BACKEND_SNDIO:BOOL=ON \
 					-DQT_QMAKE_EXECUTABLE=%{_prefix}/lib/qt6/bin/qmake \
 					-G Ninja
 cd ..
 %endif
-%cmake -DCMAKE_CXX_FLAGS="-Wno-function-effects" \
-				-DALSOFT_INSTALL_CONFIG=ON \
+%cmake -DALSOFT_INSTALL_CONFIG=ON \
 				-DALSOFT_EXAMPLES=ON \
 				-DALSOFT_BACKEND_SNDIO:BOOL=ON \
 				-DQT_QMAKE_EXECUTABLE=%{_libdir}/qt6/bin/qmake \
