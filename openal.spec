@@ -19,7 +19,7 @@ Summary:	3D Sound Library
 %global optflags %{optflags} -Wno-function-effects -Wno-error=function-effects
 Name:	openal
 Version:	1.25.2
-Release:	7
+Release:	8
 License:	LGPLv2
 Group:	Sound
 Url:		https://github.com/kcat/openal-soft
@@ -184,7 +184,8 @@ applications which will use OpenAL, a free 3D audio library.
 %autosetup -n %{oname}-%{version} -p1
 # openal-soft 1.25.2 always builds against bundled fmt-11.x (no ALSOFT_USE_SYSTEM_FMT)
 # Do not pass -DCMAKE_CXX_FLAGS here: it overrides multilib -m32 flags from cmake32.
-# -Wno-function-effects comes from optflags above.
+# openal CMakeLists adds -Werror=function-effects after optflags; drop that for Clang 23.
+sed -i -e '/Werror=function-effects/d' -e '/-Wfunction-effects/d' CMakeLists.txt
 %if %{with compat32}
 %cmake32 -DALSOFT_INSTALL_CONFIG=ON \
 					-DALSOFT_EXAMPLES=ON \
